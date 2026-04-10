@@ -13,7 +13,7 @@ import { Download, FlaskConical, Edit, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatBirr } from '@/lib/currency';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const LabDashboard = () => {
   const { user } = useAuth();

@@ -13,7 +13,7 @@ import { downloadCsv } from '@/lib/export';
 import { Plus, Trash2, Edit, Download } from 'lucide-react';
 import { toast } from 'sonner';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const PatientsPage = () => {
   const [patients, setPatients] = useState<any[]>([]);

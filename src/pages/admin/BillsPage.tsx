@@ -12,7 +12,7 @@ import { formatBirr } from '@/lib/currency';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const BillsPage = () => {
   const [bills, setBills] = useState<any[]>([]);

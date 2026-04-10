@@ -13,8 +13,8 @@ import { formatBirr } from '@/lib/currency';
 import { downloadCsv } from '@/lib/export';
 import { Download, Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import { API_URL } from '@/lib/api-config';
 
-const API_URL = 'http://localhost:3001/api';
 
 const SpecialistBillingPage = () => {
   const { user } = useAuth();

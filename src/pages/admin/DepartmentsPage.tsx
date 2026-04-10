@@ -10,7 +10,7 @@ import { downloadCsv } from '@/lib/export';
 import { Download, Edit, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const DepartmentsPage = () => {
   const [departments, setDepartments] = useState<{ id: string; name: string; created_at: string }[]>([]);

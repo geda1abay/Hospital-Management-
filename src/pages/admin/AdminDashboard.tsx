@@ -4,8 +4,8 @@ import { Users, Stethoscope, DollarSign, FileText, TrendingUp, Activity } from '
 import DashboardLayout from '@/components/DashboardLayout';
 import { formatBirr } from '@/lib/currency';
 import { toast } from 'sonner';
+import { API_URL } from '@/lib/api-config';
 
-const API_URL = 'http://localhost:3001/api';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ patients: 0, doctors: 0, revenue: 0, bills: 0, pendingBills: 0, payments: 0 });

@@ -14,7 +14,7 @@ import { downloadCsv } from '@/lib/export';
 import { ClipboardPlus, Download, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const GeneralDoctorPage = () => {
   const { user } = useAuth();

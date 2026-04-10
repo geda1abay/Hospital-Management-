@@ -26,7 +26,7 @@ const birrFormatter = new Intl.NumberFormat('en-ET', {
   minimumFractionDigits: 2,
 });
 
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '@/lib/api-config';
 
 const DoctorsPage = () => {
   const [doctors, setDoctors] = useState<DoctorRow[]>([]);
