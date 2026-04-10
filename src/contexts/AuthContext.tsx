@@ -15,7 +15,7 @@ interface AuthContextType {
   role: AppRole | null;
   profile: { full_name: string; email: string; department_id: string | null } | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ user: User | null; error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -71,9 +71,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(data.user);
       setRole(data.user.role);
       // Profile will be fetched if needed, but for now we set user data
-      return { error: null };
+      return { user: data.user, error: null };
     } catch (err) {
-      return { error: err as Error };
+      return { user: null, error: err as Error };
     }
   };
 

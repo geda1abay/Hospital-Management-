@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Stethoscope, Mail, Lock, AlertCircle } from 'lucide-react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('gedaabay@gmail.com');
+  const [password, setPassword] = useState('15183510');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
@@ -20,24 +20,26 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    const { error } = await signIn(email.trim(), password);
+    const { user: signedInUser, error } = await signIn(email.trim(), password);
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
 
-    // Redirect based on role (which is now in the user object)
-    // We can't rely on getting it from the state immediately after signIn 
-    // because state updates are async. However, the AuthContext.signIn 
-    // updates the state. We'll use the user from the state or just redirect to dashboard
-    // and let the Home component handle it, but better to check the data from signIn result if we changed it.
-    // For now, let's just use the logic from AuthContext which sets the user.
-    // We'll add a small delay or a check.
-    
-    // In a real app, signIn would return the user object. 
-    // Let's assume the user is redirected to '/' and then navigate handles it.
-    navigate('/');
+    if (signedInUser) {
+      if (signedInUser.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (signedInUser.role === 'general_doctor') {
+        navigate('/doctor/general');
+      } else if (signedInUser.role === 'specialist_doctor') {
+        navigate('/doctor/specialist');
+      } else if (signedInUser.role === 'laboratory_technician') {
+        navigate('/laboratory/dashboard');
+      } else {
+        navigate('/');
+      }
+    }
     setLoading(false);
   };
 
