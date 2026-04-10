@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Stethoscope, Mail, Lock, AlertCircle } from 'lucide-react';
 
 const Login = () => {
-  const [email, setEmail] = useState('gedaabay@gmail.com');
-  const [password, setPassword] = useState('15183510');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();

@@ -42,8 +42,8 @@ async function seedAdmin() {
     
     // Insert profile
     await pool.query(
-      'INSERT INTO public.profiles (user_id, full_name, email, role) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET full_name = $2, email = $3, role = $4',
-      [userId, fullName, email, role]
+      'INSERT INTO public.profiles (user_id, full_name, email) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO UPDATE SET full_name = $2, email = $3',
+      [userId, fullName, email]
     );
     
     console.log('Admin user seeded successfully!');

@@ -1,23 +1,16 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE public.app_role AS ENUM ('admin', 'general_doctor', 'specialist_doctor', 'laboratory_technician');
-[ ... ]
-CREATE TABLE public.lab_requests (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  patient_id UUID NOT NULL REFERENCES public.patients(id) ON DELETE CASCADE,
-  doctor_id UUID NOT NULL REFERENCES public.app_users(id),
-  test_description TEXT NOT NULL,
-  cost_birr NUMERIC(10, 2) DEFAULT 0,
-  result_note TEXT,
-  payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid')),
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed')),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
 
-CREATE TRIGGER update_lab_requests_updated_at
-BEFORE UPDATE ON public.lab_requests
-FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$;
 
 CREATE TABLE public.departments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -63,6 +56,19 @@ CREATE TABLE public.patients (
   referred_specialist_id UUID REFERENCES public.app_users(id),
   medical_history TEXT,
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'discharged', 'referred')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE public.lab_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  patient_id UUID NOT NULL REFERENCES public.patients(id) ON DELETE CASCADE,
+  doctor_id UUID NOT NULL REFERENCES public.app_users(id),
+  test_description TEXT NOT NULL,
+  cost_birr NUMERIC(10, 2) DEFAULT 0,
+  result_note TEXT,
+  payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid')),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -141,15 +147,9 @@ AS $$
   LIMIT 1
 $$;
 
-CREATE OR REPLACE FUNCTION public.update_updated_at_column()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-AS $$
-BEGIN
-  NEW.updated_at = now();
-  RETURN NEW;
-END;
-$$;
+CREATE TRIGGER update_lab_requests_updated_at
+BEFORE UPDATE ON public.lab_requests
+FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 CREATE TRIGGER update_app_users_updated_at
 BEFORE UPDATE ON public.app_users
