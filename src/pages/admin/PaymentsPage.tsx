@@ -228,12 +228,59 @@ const PaymentsPage = () => {
         </div>
 
         <Tabs defaultValue="hospital" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+          <TabsList className="grid w-full grid-cols-3 max-w-[500px]">
             <TabsTrigger value="hospital">Hospital Bills</TabsTrigger>
             <TabsTrigger value="lab">Lab Payments</TabsTrigger>
+            <TabsTrigger value="history">Transaction History</TabsTrigger>
           </TabsList>
           
           <TabsContent value="hospital" className="pt-4">
+            <Card>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Patient</TableHead>
+                      <TableHead>Total Cost</TableHead>
+                      <TableHead>Final Cost (after discount)</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {bills.map((b) => (
+                      <TableRow key={b.id}>
+                        <TableCell className="font-medium">{b.patient_name}</TableCell>
+                        <TableCell>{formatBirr(Number(b.total_amount))}</TableCell>
+                        <TableCell className="font-bold">{formatBirr(Number(b.final_amount))}</TableCell>
+                        <TableCell>
+                          <Badge variant="secondary" className={b.status === 'paid' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}>
+                            {b.status.toUpperCase()}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {b.status !== 'paid' && (
+                            <Button size="sm" onClick={() => { 
+                               setEditPayment(null);
+                               setForm({ bill_id: b.id, amount: String(b.final_amount), method: 'cash', reference_number: '', status: 'completed' });
+                               setOpen(true); 
+                            }}>
+                              <Check className="mr-1 h-3 w-3" /> Record Payment
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {bills.length === 0 && (
+                      <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No hospital bills found</TableCell></TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="history" className="pt-4">
             <Card>
               <CardContent className="p-0">
                 <Table>
