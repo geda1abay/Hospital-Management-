@@ -144,6 +144,19 @@ app.patch('/api/patients/:id', authenticateToken, async (req, res) => {
   }
 });
 
+app.post('/api/patients/:id/refer', authenticateToken, async (req, res) => {
+  const { referred_specialist_id } = req.body;
+  try {
+    const result = await pool.query(
+      'UPDATE public.patients SET referred_specialist_id = $1, status = $2 WHERE id = $3 RETURNING *',
+      [referred_specialist_id, 'referred', req.params.id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.delete('/api/patients/:id', authenticateToken, async (req, res) => {
   try {
     await pool.query('DELETE FROM public.patients WHERE id = $1', [req.params.id]);
